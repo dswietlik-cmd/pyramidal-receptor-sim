@@ -180,3 +180,7 @@ python scripts/reproduce_paper.py --simulate --sensitivity
 
 See [`docs/PAPER_WORKFLOW.md`](docs/PAPER_WORKFLOW.md) for the exact paired-seed design,
 bootstrap procedure, perturbation definitions, and interpretation limits.
+
+## Pathological hyperexcitability states
+
+Version 0.9.2 adds a phenotype-level hyperexcitability calibration that changes only excitatory input drive, leaving AMPA, NMDA, GABA-A receptor gains and inhibitory input frequencies unchanged. The n=20 reference states are approximately 18 Hz (mild; 1.30× excitatory drive), 24 Hz (moderate; 1.65×), and 30 Hz (severe; 1.90×). See `docs/PATHOLOGY.md`.

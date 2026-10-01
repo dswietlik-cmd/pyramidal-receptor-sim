@@ -13,4 +13,6 @@ __all__ = [
     "configure_neuron",
 ]
 
-__version__ = "0.9.1"
+__version__ = "0.9.2"
+
+from .pathology import HyperexcitabilityState, STATES, HEALTHY, MILD, MODERATE, SEVERE
