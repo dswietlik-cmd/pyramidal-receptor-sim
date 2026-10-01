@@ -19,7 +19,7 @@ __all__ = [
     "GABAA_HEALTHY", "GABAA_COMPLETE_LOSS", "apply_gabaa_disinhibition",
 ]
 
-__version__ = "0.9.5"
+__version__ = "0.9.6"
 
 from .pathology import (
     HyperexcitabilityState, STATES, HEALTHY, MILD, MODERATE, SEVERE,

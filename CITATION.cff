@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: "Swietlik"
     given-names: "Dariusz"
-version: 0.9.5
+version: 0.9.6
 date-released: 2026-10-01
 repository-code: "https://github.com/dswietlik-cmd/pyramidal-receptor-sim"
 license: "BSD-3-Clause"

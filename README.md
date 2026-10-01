@@ -174,7 +174,7 @@ You may use, modify, and redistribute the software under those terms. Redistribu
 
 ## Development status
 
-Current development release: **v0.9.5**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
+Current development release: **v0.9.6**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
 
 ## Manuscript reproduction pipeline
 
@@ -207,3 +207,8 @@ activity. See `docs/NMDA_EXCITOTOXICITY.md` and `docs/TWO_PATHOLOGY_COMPARISON.m
 ## v0.9.5: GABA-A disinhibition boundary analysis
 
 Version 0.9.5 adds a pathology-specific `gabaa_pathology_multiplier`, independent of diazepam pharmacological gain, and tests isolated GABA-A hypofunction across n=20 paired realizations. Under the current reference calibration, even complete modeled GABA-A loss increases mean firing only from about 10.97 to 11.28 Hz and therefore does **not** reproduce the pre-specified 18/24/30 Hz hyperexcitability phenotypes. The complete-loss condition is retained as a boundary/stress-test state rather than a matched moderate pathology. See `docs/GABAA_DISINHIBITION.md` and `docs/THREE_PATHOLOGY_COMPARISON.md`.
+
+
+## v0.9.6: Final paired healthy-vs-pathology publication experiment
+
+Version 0.9.6 freezes the current n=20 paired analysis comparing the healthy state with two matched moderate pathological states: input-driven hyperexcitability and NMDA-driven excitotoxicity-like pathology. It adds state-specific 4PL/paired-bootstrap analysis, a descriptive healthy-preserving therapeutic-window analysis, publication tables, Figures 1–5, and a Results draft in `results/publication_final/`. Functional EC50 values are reported only when 50% suppression is actually reached within the tested concentration range; extrapolated 4PL values are retained separately and are not treated as observed EC50 estimates.
