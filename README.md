@@ -36,6 +36,18 @@ somatic potential -> spikes -> firing-rate response
 
 Only the current refactored implementation is distributed in this repository. Historical source code is not included.
 
+
+## Healthy vs pathological pharmacology (v0.9.3)
+
+The repository now includes a paired n=20 comparison of the same concentration-response protocols in the **healthy** state and the calibrated **moderate hyperexcitability** state (1.65x excitatory drive). The analysis reports firing, receptor/synaptic readouts, Pathological Activity Normalization (PAN), and an exploratory model selectivity index. See [`docs/HEALTHY_PATHOLOGICAL_DRUGS.md`](docs/HEALTHY_PATHOLOGICAL_DRUGS.md).
+
+Run the complete paired experiment with:
+
+```bash
+pip install -e ".[fast]"
+python scripts/run_healthy_pathological_drugs_fast.py
+```
+
 ## Model at a glance
 
 The reference CA1-like configuration contains 13 excitatory and 3 inhibitory inputs, a 0.5 ms integration step, separate AMPA/NMDA/GABA-A components, voltage-dependent NMDA gating, an explicit calibrated NMDA contribution to the somatic postsynaptic potential, and an NMDA-coupled plasticity state. Publication simulations use rate-preserving jittered input trains and recorded random seeds.
