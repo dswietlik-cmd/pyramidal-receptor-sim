@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyramidal-receptor-sim"
+version = "0.9.0"
+description = "CA1-like pyramidal neuron model for in silico NMDA, AMPA and GABA-A receptor pharmacodynamics"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Dariusz Swietlik"}]
+license = {text = "BSD-3-Clause"}
+dependencies = ["numpy>=1.24", "scipy>=1.10"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: BSD License",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+fast = ["numba>=0.59"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
