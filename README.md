@@ -37,7 +37,7 @@ somatic potential -> spikes -> firing-rate response
 Only the current refactored implementation is distributed in this repository. Historical source code is not included.
 
 
-## Healthy vs pathological pharmacology (v0.9.4)
+## Healthy vs pathological pharmacology (v0.9.5)
 
 The repository now includes a paired n=20 comparison of the same concentration-response protocols in the **healthy** state and the calibrated **moderate hyperexcitability** state (1.65x excitatory drive). The analysis reports firing, receptor/synaptic readouts, Pathological Activity Normalization (PAN), and an exploratory model selectivity index. See [`docs/HEALTHY_PATHOLOGICAL_DRUGS.md`](docs/HEALTHY_PATHOLOGICAL_DRUGS.md).
 
@@ -164,7 +164,7 @@ The computational framework builds on previous work on NMDA-receptor function, e
 
 ## Citation
 
-A [`CITATION.cff`](CITATION.cff) file is included so GitHub can expose a **Cite this repository** action. The canonical repository is `https://github.com/dswietlik-cmd/pyramidal-receptor-sim`. For the pre-publication phase, cite the repository commit or v0.9.1 tag when needed. The final manuscript-associated **v1.0.0** release will be archived with Zenodo (or another long-term repository), and its DOI will then be added here and to `CITATION.cff`.
+A [`CITATION.cff`](CITATION.cff) file is included so GitHub can expose a **Cite this repository** action. The canonical repository is `https://github.com/dswietlik-cmd/pyramidal-receptor-sim`. For the pre-publication phase, cite the repository commit or the relevant v0.9.x tag when needed. The final manuscript-associated **v1.0.0** release will be archived with Zenodo (or another long-term repository), and its DOI will then be added here and to `CITATION.cff`.
 
 ## License
 
@@ -174,7 +174,7 @@ You may use, modify, and redistribute the software under those terms. Redistribu
 
 ## Development status
 
-Current development release: **v0.9.1**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
+Current development release: **v0.9.5**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
 
 ## Manuscript reproduction pipeline
 
@@ -202,3 +202,8 @@ Version 0.9.2 adds a phenotype-level hyperexcitability calibration that changes 
 The repository now includes two moderate pathological phenotypes with similar mean firing
 but different mechanisms: input-driven hyperexcitability and NMDA-driven excitotoxicity-like
 activity. See `docs/NMDA_EXCITOTOXICITY.md` and `docs/TWO_PATHOLOGY_COMPARISON.md`.
+
+
+## v0.9.5: GABA-A disinhibition boundary analysis
+
+Version 0.9.5 adds a pathology-specific `gabaa_pathology_multiplier`, independent of diazepam pharmacological gain, and tests isolated GABA-A hypofunction across n=20 paired realizations. Under the current reference calibration, even complete modeled GABA-A loss increases mean firing only from about 10.97 to 11.28 Hz and therefore does **not** reproduce the pre-specified 18/24/30 Hz hyperexcitability phenotypes. The complete-loss condition is retained as a boundary/stress-test state rather than a matched moderate pathology. See `docs/GABAA_DISINHIBITION.md` and `docs/THREE_PATHOLOGY_COMPARISON.md`.

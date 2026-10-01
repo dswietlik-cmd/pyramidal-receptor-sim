@@ -15,13 +15,17 @@ __all__ = [
     "NMDAExcitotoxicityState", "NMDA_EXCITOTOXICITY_STATES",
     "NMDA_HEALTHY", "NMDA_MILD", "NMDA_MODERATE", "NMDA_SEVERE",
     "apply_nmda_excitotoxicity",
+    "GABAADisinhibitionState", "GABAA_DISINHIBITION_STATES",
+    "GABAA_HEALTHY", "GABAA_COMPLETE_LOSS", "apply_gabaa_disinhibition",
 ]
 
-__version__ = "0.9.4"
+__version__ = "0.9.5"
 
 from .pathology import (
     HyperexcitabilityState, STATES, HEALTHY, MILD, MODERATE, SEVERE,
     NMDAExcitotoxicityState, NMDA_EXCITOTOXICITY_STATES,
     NMDA_HEALTHY, NMDA_MILD, NMDA_MODERATE, NMDA_SEVERE,
     apply_nmda_excitotoxicity,
+    GABAADisinhibitionState, GABAA_DISINHIBITION_STATES,
+    GABAA_HEALTHY, GABAA_COMPLETE_LOSS, apply_gabaa_disinhibition,
 )

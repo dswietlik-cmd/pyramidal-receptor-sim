@@ -66,6 +66,11 @@ class Neuron:
         # independently parameterized. 1.0 = healthy reference.
         self.nmda_pathology_multiplier = 1.0
 
+        # Pathology-level GABA-A efficacy. This is separate from gabaa_gain used
+        # for diazepam. 1.0 = healthy reference; values in [0, 1) model loss of
+        # inhibitory GABA-A efficacy (disinhibition/hypofunction).
+        self.gabaa_pathology_multiplier = 1.0
+
         # Explicit NMDA contribution to the postsynaptic membrane potential.
         # Externally calibrated for a CA1 Schaffer-collateral-like synapse.
         # Otmakhova et al. reported an NMDA/AMPA EPSP-area ratio of 1.46 +/- 0.3
@@ -242,6 +247,18 @@ class Neuron:
             raise ValueError("NMDA pathology multiplier must be > 0")
         self.nmda_pathology_multiplier = float(multiplier)
 
+    def set_gabaa_pathology_multiplier(self, multiplier: float = 1.0):
+        """Set disease-level GABA-A inhibitory-efficacy multiplier.
+
+        This is intentionally separate from ``gabaa_gain`` used for diazepam.
+        A value of 1.0 is the healthy reference; values in [0, 1) reduce the
+        effective GABA-A synaptic response without changing presynaptic input
+        frequencies or the drug concentration-response mapping.
+        """
+        if not (0.0 <= multiplier <= 1.0):
+            raise ValueError("GABA-A pathology multiplier must be between 0 and 1")
+        self.gabaa_pathology_multiplier = float(multiplier)
+
     def reset_receptor_gains(self):
         """Return AMPA, NMDA and GABA-A gains to the drug-free reference state."""
         self.ampa_gain = 1.0
@@ -308,7 +325,7 @@ class Neuron:
             if self.inhibitory_input_state[i] == 1:
                 self.inhibitory_delay_counter[i] = 6
                 for k in range(33):
-                    self.gabaa_registers[i][k] += self.gabaa_gain * self.gabaa_kernel[k]
+                    self.gabaa_registers[i][k] += self.gabaa_pathology_multiplier * self.gabaa_gain * self.gabaa_kernel[k]
 
         # NMDA/plasticity update: the previous voltage-gating state controls
         # insertion of the NMDA response before the gating state is recalculated.
@@ -434,6 +451,7 @@ class Neuron:
             "ampa_gain": self.ampa_gain,
             "nmda_gain": self.nmda_gain,
             "gaba_gain": self.gabaa_gain,
+            "gaba_pathology_multiplier": self.gabaa_pathology_multiplier,
             "nmda_psp_scale": self.nmda_psp_scale,
             "ampa_psp_component": self.last_ampa_psp,
             "nmda_psp_component": self.last_nmda_psp,

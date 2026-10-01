@@ -1,0 +1,5 @@
+state,matched_hyperexcitable,n,mean_firing_hz,sd_firing_hz,mean_paired_delta_vs_healthy_hz,sd_paired_delta_vs_healthy_hz
+healthy,False,20,10.965,0.9056983348136456,0.0,0.0
+input_hyperexcitable,True,20,24.605,1.088927526465713,13.64,1.0480056247338005
+nmda_excitotoxic,True,20,23.605,5.615905513525144,12.64,5.6814935026850675
+gabaa_complete_loss,False,20,11.28,0.7381342054553207,0.31499999999999984,0.26212692787233716

@@ -137,3 +137,13 @@ The reference workflows record:
 
 A functional EC50 estimated from firing suppression is an emergent systems-level quantity and should
 not be interpreted as a receptor-binding EC50 or IC50.
+
+## Disease-level GABA-A efficacy (v0.9.5)
+
+The model contains a pathology-specific `gabaa_pathology_multiplier` that is distinct from the pharmacological `gabaa_gain` used for diazepam. For an inhibitory synaptic event, the effective GABA-A kernel amplitude is
+
+```text
+GABA_effective = gabaa_pathology_multiplier * gabaa_gain * GABA_kernel
+```
+
+`gabaa_pathology_multiplier = 1` is the healthy reference. Values below 1 reduce modeled inhibitory efficacy. The pathology multiplier is constrained to [0, 1]. Its separation from `gabaa_gain` allows disease state and drug action to be parameterized independently.

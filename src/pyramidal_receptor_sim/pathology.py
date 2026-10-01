@@ -55,3 +55,24 @@ def apply_nmda_excitotoxicity(neuron, state: str | NMDAExcitotoxicityState):
     preset = NMDA_EXCITOTOXICITY_STATES[state] if isinstance(state, str) else state
     neuron.set_nmda_pathology_multiplier(preset.nmda_pathology_multiplier)
     return neuron
+
+@dataclass(frozen=True)
+class GABAADisinhibitionState:
+    """GABA-A hypofunction state defined by reduced postsynaptic inhibitory efficacy."""
+    name: str
+    gabaa_pathology_multiplier: float
+    target_firing_hz: float | None
+    calibrated_mean_firing_hz: float
+    calibrated_sd_firing_hz: float
+
+# Calibration in v0.9.5 showed that isolated loss of GABA-A efficacy cannot
+# generate the pre-specified 18/24/30 Hz hyperexcitability phenotypes in the
+# current reference model. Complete loss is retained as a boundary condition.
+GABAA_HEALTHY = GABAADisinhibitionState("healthy", 1.00, 12.0, 10.965, 0.906)
+GABAA_COMPLETE_LOSS = GABAADisinhibitionState("complete_loss", 0.00, None, 11.280, 0.738)
+GABAA_DISINHIBITION_STATES = {s.name: s for s in (GABAA_HEALTHY, GABAA_COMPLETE_LOSS)}
+
+def apply_gabaa_disinhibition(neuron, state: str | GABAADisinhibitionState):
+    preset = GABAA_DISINHIBITION_STATES[state] if isinstance(state, str) else state
+    neuron.set_gabaa_pathology_multiplier(preset.gabaa_pathology_multiplier)
+    return neuron

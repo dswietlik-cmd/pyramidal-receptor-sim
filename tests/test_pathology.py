@@ -22,3 +22,24 @@ def test_invalid_nmda_pathology_multiplier_rejected():
     n = Neuron()
     with pytest.raises(ValueError):
         n.set_nmda_pathology_multiplier(0)
+
+
+def test_gabaa_pathology_multiplier_is_separate_from_drug_gain():
+    from pyramidal_receptor_sim import Neuron
+    n = Neuron()
+    n.set_gabaa_pathology_multiplier(0.5)
+    assert n.gabaa_pathology_multiplier == 0.5
+    assert n.gabaa_gain == 1.0
+    n.apply_diazepam(10.0, "nM")
+    assert n.gabaa_pathology_multiplier == 0.5
+    assert n.gabaa_gain > 1.0
+
+
+def test_gabaa_pathology_multiplier_bounds():
+    import pytest
+    from pyramidal_receptor_sim import Neuron
+    n = Neuron()
+    with pytest.raises(ValueError):
+        n.set_gabaa_pathology_multiplier(-0.01)
+    with pytest.raises(ValueError):
+        n.set_gabaa_pathology_multiplier(1.01)

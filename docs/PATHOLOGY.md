@@ -28,3 +28,7 @@ The pathological labels describe **phenotype severity in this computational mode
 ## Important observation
 
 The firing-rate response to input-drive scaling is not perfectly monotonic at every intermediate multiplier. This is expected from the nonlinear threshold dynamics and temporally jittered multi-input structure. Therefore state selection was based on the closest n=20 mean firing rate to each prespecified phenotype target rather than assuming a monotonic linear mapping.
+
+## GABA-A hypofunction boundary (v0.9.5)
+
+An isolated GABA-A pathology axis was tested using a disease-specific postsynaptic efficacy multiplier while keeping receptor pharmacology, excitatory drive, and all membrane parameters unchanged. In the present reference calibration, complete loss of modeled GABA-A inhibition increased mean firing only from 10.965 Hz to 11.280 Hz (n=20). Consequently, no mild/moderate/severe GABA-A disinhibition presets are declared. See `GABAA_DISINHIBITION.md`.
