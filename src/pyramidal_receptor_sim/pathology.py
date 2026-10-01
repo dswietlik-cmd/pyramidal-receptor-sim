@@ -34,3 +34,24 @@ def apply_excitatory_drive(frequencies: Iterable[float], n_excitatory_inputs: in
 def frequencies_for_state(frequencies: Iterable[float], n_excitatory_inputs: int, state: str | HyperexcitabilityState) -> list[float]:
     preset = STATES[state] if isinstance(state, str) else state
     return apply_excitatory_drive(frequencies, n_excitatory_inputs, preset.excitatory_drive_multiplier)
+
+
+@dataclass(frozen=True)
+class NMDAExcitotoxicityState:
+    """Calibrated excitotoxicity-like phenotype driven by NMDA synaptic input."""
+    name: str
+    nmda_pathology_multiplier: float
+    target_firing_hz: float
+    calibrated_mean_firing_hz: float
+    calibrated_sd_firing_hz: float
+
+NMDA_HEALTHY = NMDAExcitotoxicityState("healthy", 1.00, 12.0, 11.015, 0.824)
+NMDA_MILD = NMDAExcitotoxicityState("mild", 3.00, 18.0, 18.530, 1.931)
+NMDA_MODERATE = NMDAExcitotoxicityState("moderate", 4.10, 24.0, 23.405, 5.556)
+NMDA_SEVERE = NMDAExcitotoxicityState("severe", 4.70, 30.0, 30.375, 6.147)
+NMDA_EXCITOTOXICITY_STATES = {s.name: s for s in (NMDA_HEALTHY, NMDA_MILD, NMDA_MODERATE, NMDA_SEVERE)}
+
+def apply_nmda_excitotoxicity(neuron, state: str | NMDAExcitotoxicityState):
+    preset = NMDA_EXCITOTOXICITY_STATES[state] if isinstance(state, str) else state
+    neuron.set_nmda_pathology_multiplier(preset.nmda_pathology_multiplier)
+    return neuron

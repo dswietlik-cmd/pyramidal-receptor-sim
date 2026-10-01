@@ -7,3 +7,18 @@ def test_only_excitatory_frequencies_are_scaled():
     freqs=[10,20,30,5]
     out=apply_excitatory_drive(freqs,3,1.5)
     assert out == [15.0,30.0,45.0,5.0]
+
+
+def test_nmda_pathology_multiplier_is_separate_from_drug_gain():
+    from pyramidal_receptor_sim import Neuron
+    n = Neuron()
+    n.set_nmda_pathology_multiplier(4.1)
+    assert n.nmda_pathology_multiplier == 4.1
+    assert n.nmda_gain == 1.0
+
+def test_invalid_nmda_pathology_multiplier_rejected():
+    import pytest
+    from pyramidal_receptor_sim import Neuron
+    n = Neuron()
+    with pytest.raises(ValueError):
+        n.set_nmda_pathology_multiplier(0)

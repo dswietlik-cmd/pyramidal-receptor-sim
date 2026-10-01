@@ -11,8 +11,17 @@ __all__ = [
     "apply_drug",
     "load_config",
     "configure_neuron",
+    "HyperexcitabilityState", "STATES", "HEALTHY", "MILD", "MODERATE", "SEVERE",
+    "NMDAExcitotoxicityState", "NMDA_EXCITOTOXICITY_STATES",
+    "NMDA_HEALTHY", "NMDA_MILD", "NMDA_MODERATE", "NMDA_SEVERE",
+    "apply_nmda_excitotoxicity",
 ]
 
-__version__ = "0.9.3"
+__version__ = "0.9.4"
 
-from .pathology import HyperexcitabilityState, STATES, HEALTHY, MILD, MODERATE, SEVERE
+from .pathology import (
+    HyperexcitabilityState, STATES, HEALTHY, MILD, MODERATE, SEVERE,
+    NMDAExcitotoxicityState, NMDA_EXCITOTOXICITY_STATES,
+    NMDA_HEALTHY, NMDA_MILD, NMDA_MODERATE, NMDA_SEVERE,
+    apply_nmda_excitotoxicity,
+)

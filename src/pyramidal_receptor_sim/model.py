@@ -61,6 +61,11 @@ class Neuron:
         self.nmda_gain = 1.0
         self.gabaa_gain = 1.0
 
+        # Pathology-level NMDA drive. This multiplier is separate from the
+        # pharmacological NMDA gain so disease state and drug action remain
+        # independently parameterized. 1.0 = healthy reference.
+        self.nmda_pathology_multiplier = 1.0
+
         # Explicit NMDA contribution to the postsynaptic membrane potential.
         # Externally calibrated for a CA1 Schaffer-collateral-like synapse.
         # Otmakhova et al. reported an NMDA/AMPA EPSP-area ratio of 1.46 +/- 0.3
@@ -224,6 +229,19 @@ class Neuron:
         if nmda_psp_scale is not None:
             self.nmda_psp_scale = float(nmda_psp_scale)
 
+
+    def set_nmda_pathology_multiplier(self, multiplier: float = 1.0):
+        """Set disease-level NMDA synaptic-drive multiplier.
+
+        This is intentionally separate from ``nmda_gain`` used for drug action.
+        A value of 1.0 is the healthy reference. Values >1 model an
+        excitotoxicity-like increase in NMDA-mediated synaptic drive while
+        leaving AMPA and GABA-A gains and presynaptic input frequencies unchanged.
+        """
+        if multiplier <= 0:
+            raise ValueError("NMDA pathology multiplier must be > 0")
+        self.nmda_pathology_multiplier = float(multiplier)
+
     def reset_receptor_gains(self):
         """Return AMPA, NMDA and GABA-A gains to the drug-free reference state."""
         self.ampa_gain = 1.0
@@ -297,7 +315,7 @@ class Neuron:
         for i in range(1, self.n_excitatory_inputs + 1):
             if self.excitatory_input_state[i] == 1 and self.nmda_gate_open[i] == 1:
                 for k in range(33):
-                    self.nmda_registers[i][k] += self.nmda_gain * self.nmda_kernel[k]
+                    self.nmda_registers[i][k] += self.nmda_pathology_multiplier * self.nmda_gain * self.nmda_kernel[k]
             self.update_nmda_memory(i)
             self.nmda_gate_open[i] = self.nmda_threshold_crossed(i)
 
