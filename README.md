@@ -152,7 +152,7 @@ The computational framework builds on previous work on NMDA-receptor function, e
 
 ## Citation
 
-A [`CITATION.cff`](CITATION.cff) file is included so GitHub can expose a **Cite this repository** action. The canonical repository is `https://github.com/dswietlik-cmd/pyramidal-receptor-sim`. For the pre-publication phase, cite the repository commit or v0.9.0 tag when needed. The final manuscript-associated **v1.0.0** release will be archived with Zenodo (or another long-term repository), and its DOI will then be added here and to `CITATION.cff`.
+A [`CITATION.cff`](CITATION.cff) file is included so GitHub can expose a **Cite this repository** action. The canonical repository is `https://github.com/dswietlik-cmd/pyramidal-receptor-sim`. For the pre-publication phase, cite the repository commit or v0.9.1 tag when needed. The final manuscript-associated **v1.0.0** release will be archived with Zenodo (or another long-term repository), and its DOI will then be added here and to `CITATION.cff`.
 
 ## License
 
@@ -162,4 +162,21 @@ You may use, modify, and redistribute the software under those terms. Redistribu
 
 ## Development status
 
-Current development release: **v0.9.0**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
+Current development release: **v0.9.1**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
+
+## Manuscript reproduction pipeline
+
+A single entry point is provided for the current pre-publication analysis:
+
+```bash
+python scripts/reproduce_paper.py
+```
+
+For full regeneration of the concentration-response simulations and OAT sensitivity analysis:
+
+```bash
+python scripts/reproduce_paper.py --simulate --sensitivity
+```
+
+See [`docs/PAPER_WORKFLOW.md`](docs/PAPER_WORKFLOW.md) for the exact paired-seed design,
+bootstrap procedure, perturbation definitions, and interpretation limits.
