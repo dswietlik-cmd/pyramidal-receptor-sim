@@ -1,0 +1,4 @@
+drug,first_significant_state_difference_nM,highest_concentration_nM,highest_mean_delta_percent,highest_p_holm,highest_rank_biserial_r
+perampanel,12.0,22.0,65.28221323296792,1.52587890625e-05,1.0
+memantine,50.0,500.0,-2.844861897695871,0.24548721313476562,-0.3047619047619048
+diazepam,10.0,60.0,65.84636823860977,3.4332275390625e-05,0.9904761904761905

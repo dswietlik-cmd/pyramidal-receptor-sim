@@ -1,0 +1,5 @@
+analysis,comparison,n,statistic,df,p_raw,p_holm,effect_size,effect,median_difference_hz
+overall,3 states,20,32.5,2.0,8.76424821944364e-08,,Kendall W,0.8125,
+posthoc,healthy vs input_hyperexcitable,20,0.0,,8.819870204194453e-05,0.00017639740408388906,matched rank-biserial r,-1.0,-13.85
+posthoc,healthy vs nmda_excitotoxic,20,0.0,,1.9073486328125e-06,5.7220458984375e-06,matched rank-biserial r,-1.0,-11.1
+posthoc,input_hyperexcitable vs nmda_excitotoxic,20,56.0,,0.06733069932137338,0.06733069932137338,matched rank-biserial r,0.4666666666666667,2.200000000000001
