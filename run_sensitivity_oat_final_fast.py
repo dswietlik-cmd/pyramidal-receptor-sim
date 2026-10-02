@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Final OAT sensitivity analysis at v0.9.6 healthy-state functional EC50 values.
+"""Final OAT sensitivity analysis at the manuscript healthy-state functional EC50 values.
 
 The EC50 values are read directly from the final state-specific 4PL table, avoiding
 hard-coded carry-over from earlier calibration runs. The analysis uses the Numba core

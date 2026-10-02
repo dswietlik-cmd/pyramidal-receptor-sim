@@ -100,35 +100,56 @@ The output contains time-resolved spike state, somatic postsynaptic potential, r
 
 ## Reproduce the paper workflow
 
-The reference concentration-response workflow uses **20 paired stochastic realizations per concentration**. Within a replicate, the same jittered input realization is reused across concentrations so that receptor modulation is compared against an identical input train.
+The canonical manuscript workflow uses **20 paired computational stochastic realizations per state and concentration**. Seed IDs are preserved across concentrations so that drug-induced changes are compared against matched stochastic input realizations.
+
+Install the publication dependencies and run the final analysis with:
 
 ```bash
-python scripts/run_publication_n20.py
-python scripts/fit_4pl.py publication_n20_replicates.csv --output curve_fits.csv
+pip install -e ".[publication]"
+python scripts/reproduce_paper.py
 ```
 
-Reference outputs are included under [`results/reference/`](results/reference/):
+For full regeneration of the paired simulations and final OAT sensitivity analysis:
+
+```bash
+python scripts/reproduce_paper.py --simulate --sensitivity
+```
+
+The final main analysis uses **500 paired-seed bootstrap resamples** with bootstrap RNG seed `20261001`. Reference replicate-level inputs are stored under [`results/reference/`](results/reference/), while the canonical manuscript tables and figures are stored under [`results/publication_final/`](results/publication_final/).
+
+Key paired input files are:
 
 ```text
-publication_n20_replicates.csv
-publication_n20_summary.csv
-publication_n20_fits.csv
-publication_sensitivity_oat_n20.csv
+healthy_two_pathologies_drug_replicates.csv
+healthy_two_pathologies_paired_metrics.csv
 ```
 
-These files are reference validation outputs, not immutable ground truth. Regenerate them after changing equations, parameters, drug mappings, input statistics, or random-seed handling.
+Key manuscript outputs include:
+
+```text
+Table1_baseline_states.csv
+Table2_state_specific_4PL_fits.csv
+Table3_functional_target_concentrations.csv
+Table4_therapeutic_window_grid.csv
+Table5_best_effect_with_healthy_preservation_ge80.csv
+Figure1_final_study_design.png ... Figure5_healthy_preserving_therapeutic_window.png
+TableS3_sensitivity_oat_final_ec50.csv
+FigureS1_sensitivity_oat_final_ec50.png
+```
+
+These files are reproducibility outputs, not immutable ground truth. Regenerate them after changing equations, parameters, drug mappings, pathology definitions, concentration grids, input statistics, or random-seed handling.
 
 ## Reference concentration-response results
 
-For the current reference configuration, four-parameter logistic fits to the n=20 workflow produced the following **functional** EC50 estimates:
+For the final healthy-state analysis, the state-specific 4PL workflow produced the following **functional** EC50 estimates:
 
-| Drug | Functional EC50 | Interpretation |
-|---|---:|---|
-| Perampanel | 11.75 nM | AMPA-mediated functional firing suppression |
-| Memantine | 176.98 nM | NMDA-mediated functional firing suppression |
-| Diazepam | 8.11 nM | GABA-A-mediated functional firing suppression |
+| Drug | Healthy-state functional EC50 | Bootstrap 95% CI |
+|---|---:|---:|
+| Perampanel | 12.70 nM | 11.37-13.99 nM |
+| Memantine | 175.47 nM | 168.94-181.56 nM |
+| Diazepam | 8.12 nM | 7.36-8.85 nM |
 
-These values are emergent properties of this configured model. They are **not molecular binding constants, clinical target concentrations, or predictions of human brain exposure**. They depend on receptor scaling, input timing, spike threshold, NMDA gating, and excitation/inhibition balance.
+These values are emergent properties of this configured model. They are **not molecular binding constants, clinical target concentrations, or predictions of human brain exposure**. Functional EC50 is reported only when at least 50% mean suppression is observed within the tested concentration range.
 
 ## Sensitivity analysis
 
@@ -174,24 +195,25 @@ You may use, modify, and redistribute the software under those terms. Redistribu
 
 ## Development status
 
-Current development release: **v0.9.6**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
+Current development release: **v0.9.8**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
 
 ## Manuscript reproduction pipeline
 
-A single entry point is provided for the current pre-publication analysis:
+A single entry point is provided for the final pre-publication paired analysis:
 
 ```bash
+pip install -e ".[publication]"
 python scripts/reproduce_paper.py
 ```
 
-For full regeneration of the concentration-response simulations and OAT sensitivity analysis:
+For full regeneration of the paired concentration-response simulations and final OAT sensitivity analysis:
 
 ```bash
 python scripts/reproduce_paper.py --simulate --sensitivity
 ```
 
 See [`docs/PAPER_WORKFLOW.md`](docs/PAPER_WORKFLOW.md) for the exact paired-seed design,
-bootstrap procedure, perturbation definitions, and interpretation limits.
+500-resample bootstrap procedure, final sensitivity workflow, and interpretation limits.
 
 ## Pathological hyperexcitability states
 
@@ -212,3 +234,12 @@ Version 0.9.5 adds a pathology-specific `gabaa_pathology_multiplier`, independen
 ## v0.9.6: Final paired healthy-vs-pathology publication experiment
 
 Version 0.9.6 freezes the current n=20 paired analysis comparing the healthy state with two matched moderate pathological states: input-driven hyperexcitability and NMDA-driven excitotoxicity-like pathology. It adds state-specific 4PL/paired-bootstrap analysis, a descriptive healthy-preserving therapeutic-window analysis, publication tables, Figures 1–5, and a Results draft in `results/publication_final/`. Functional EC50 values are reported only when 50% suppression is actually reached within the tested concentration range; extrapolated 4PL values are retained separately and are not treated as observed EC50 estimates.
+
+## v0.9.7: Final sensitivity-aligned publication package
+
+Version 0.9.7 adds the sensitivity analysis recalculated at the final healthy-state functional EC50 values used by the publication experiment, together with Supplementary Figure S1 and Table S3. It also removes an unnecessary pandas dependency from the publication-output pytest so the CI matrix remains lightweight. No primary healthy-versus-pathology concentration-response results were changed.
+
+## v0.9.8: Reproducibility and manuscript-pipeline consistency
+
+Version 0.9.8 aligns package metadata and documentation with the final pre-publication workflow. The single reproduction entry point now runs the final paired healthy/input-driven/NMDA-driven publication analysis with 500 paired-seed bootstrap resamples and routes sensitivity regeneration to the final EC50-aligned OAT script. The release also adds publication-analysis dependencies as an optional installation extra. No neuronal equations, pharmacodynamic parameters, pathology definitions, concentration grids, or manuscript numerical results are changed.
+

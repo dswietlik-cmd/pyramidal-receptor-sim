@@ -1,0 +1,28 @@
+v0.9.8 reproducibility patch
+
+Replace/upload these files in the GitHub repository, preserving paths:
+- README.md
+- pyproject.toml
+- requirements.txt
+- CITATION.cff
+- RELEASE_NOTES_v0.9.8.md
+- src/pyramidal_receptor_sim/__init__.py
+- scripts/reproduce_paper.py
+- scripts/run_sensitivity_oat_final_fast.py
+- docs/PAPER_WORKFLOW.md
+- docs/REPRODUCIBILITY.md
+
+Suggested commit message:
+Align final manuscript reproduction pipeline for v0.9.8
+
+After commit:
+1. Wait for GitHub Actions tests to finish.
+2. Confirm Python 3.10, 3.11 and 3.12 are green.
+3. Create pre-release v0.9.8 from that commit.
+4. Do not move or edit the historical v0.9.7 tag.
+
+Local verification performed before packaging:
+- pytest: 15 passed
+- python scripts/reproduce_paper.py completed successfully
+- regenerated Tables 1-5 were byte-identical to the committed canonical Tables 1-5
+- reproduction entry point no longer references the legacy 200-bootstrap workflow or old sensitivity script
