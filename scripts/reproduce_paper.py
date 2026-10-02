@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-"""Reproduce the manuscript analysis pipeline from the repository root.
+"""Reproduce the final manuscript analysis pipeline from the repository root.
 
-Default mode re-analyzes the version-controlled n=20 reference replicate dataset quickly.
-Use --simulate to regenerate the 20x concentration-response simulations before fitting.
-Use --sensitivity to additionally rerun the computationally expensive OAT analysis.
+Default mode re-analyzes the version-controlled paired n=20 reference datasets and
+regenerates the final 4PL analysis, inferential statistics, and professional figures.
+
+Use ``--simulate`` to regenerate the paired healthy/input-driven/NMDA-driven
+concentration-response datasets before analysis. Use ``--sensitivity`` to rerun the
+final OAT sensitivity analysis at the final healthy-state functional EC50 values before
+regenerating the professional Supplementary Figure S1.
 """
 from __future__ import annotations
 
 import argparse
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REF = ROOT / "results" / "reference"
 
 
 def run(*args: str) -> None:
@@ -24,42 +26,53 @@ def run(*args: str) -> None:
 
 
 def main() -> None:
-    p = argparse.ArgumentParser()
-    p.add_argument("--simulate", action="store_true", help="Regenerate n=20 simulations (slow).")
-    p.add_argument("--sensitivity", action="store_true", help="Rerun n=20 OAT sensitivity (slow).")
-    p.add_argument("--bootstrap", type=int, default=200)
-    p.add_argument("--outdir", default="results/reproduced")
-    args = p.parse_args()
-
-    out = ROOT / args.outdir
-    out.mkdir(parents=True, exist_ok=True)
-
-    replicates = out / "publication_n20_replicates.csv"
-    if args.simulate:
-        run("scripts/run_publication_n20.py")
-        shutil.move(str(ROOT / "publication_n20_replicates.csv"), replicates)
-    else:
-        shutil.copy2(REF / "publication_n20_replicates.csv", replicates)
-
-    run("scripts/fit_4pl.py", str(replicates), "--output", str(out / "publication_n20_fits.csv"))
-    run(
-        "scripts/bootstrap_4pl.py", str(replicates),
-        "--bootstrap", str(args.bootstrap),
-        "--fits-output", str(out / "publication_n20_bootstrap_fits.csv"),
-        "--targets-output", str(out / "publication_n20_bootstrap_targets.csv"),
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--simulate",
+        action="store_true",
+        help="Regenerate the paired n=20 concentration-response datasets (slow).",
     )
+    parser.add_argument(
+        "--sensitivity",
+        action="store_true",
+        help="Rerun the final n=20 OAT sensitivity analysis (slow).",
+    )
+    parser.add_argument(
+        "--tiff",
+        action="store_true",
+        help="Also export large 800-dpi TIFF versions of the professional figures.",
+    )
+    args = parser.parse_args()
+
+    if args.simulate:
+        run("scripts/compare_two_pathologies_drugs_fast.py")
+
+    # Canonical main analysis: state-specific 4PL fits, 500 paired-seed bootstrap
+    # resamples, healthy-preserving window, Tables 1-5 and legacy Figures 1-5.
+    run("scripts/final_publication_analysis.py")
+
+    # Inferential analysis of the paired computational replicates.
+    run("scripts/run_stat_analysis.py")
 
     if args.sensitivity:
-        run(
-            "scripts/run_sensitivity_oat.py",
-            "--fits", str(out / "publication_n20_fits.csv"),
-            "--output", str(out / "publication_sensitivity_oat_n20.csv"),
-        )
-    else:
-        shutil.copy2(REF / "publication_sensitivity_oat_n20.csv", out / "publication_sensitivity_oat_n20.csv")
+        run("scripts/run_sensitivity_oat_final_fast.py")
 
-    print(f"\nReproduction outputs: {out.relative_to(ROOT)}")
-    print("Use --simulate and --sensitivity for full regeneration from the model.")
+    # Journal-ready vector/PDF plus 800-dpi PNG figures. These use the committed
+    # sensitivity table unless --sensitivity regenerated it in this run.
+    figure_args = ["scripts/make_professional_figures.py"]
+    if args.tiff:
+        figure_args.append("--tiff")
+    run(*figure_args)
+
+    print("\nCanonical manuscript outputs: results/publication_final/")
+    print("Inferential statistics: Tables 9-11 and Supplementary Tables S4-S5.")
+    print("Professional figures: results/publication_final/figures_professional/")
+    if not args.simulate:
+        print("Input datasets were read from results/reference/.")
+    if not args.sensitivity:
+        print("Sensitivity Table S3 was not regenerated; add --sensitivity to rerun it.")
+    if not args.tiff:
+        print("TIFF export was skipped; add --tiff for 800-dpi TIFF files.")
 
 
 if __name__ == "__main__":
