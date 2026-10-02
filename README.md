@@ -195,7 +195,7 @@ You may use, modify, and redistribute the software under those terms. Redistribu
 
 ## Development status
 
-Current development release: **v0.9.8**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
+Current development release: **v0.9.9**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
 
 ## Manuscript reproduction pipeline
 
@@ -213,7 +213,9 @@ python scripts/reproduce_paper.py --simulate --sensitivity
 ```
 
 See [`docs/PAPER_WORKFLOW.md`](docs/PAPER_WORKFLOW.md) for the exact paired-seed design,
-500-resample bootstrap procedure, final sensitivity workflow, and interpretation limits.
+500-resample bootstrap procedure, inferential statistical workflow, professional figure generation,
+final sensitivity workflow, and interpretation limits. Statistical details are documented in
+[`docs/STATISTICAL_ANALYSIS.md`](docs/STATISTICAL_ANALYSIS.md).
 
 ## Pathological hyperexcitability states
 
@@ -242,4 +244,7 @@ Version 0.9.7 adds the sensitivity analysis recalculated at the final healthy-st
 ## v0.9.8: Reproducibility and manuscript-pipeline consistency
 
 Version 0.9.8 aligns package metadata and documentation with the final pre-publication workflow. The single reproduction entry point now runs the final paired healthy/input-driven/NMDA-driven publication analysis with 500 paired-seed bootstrap resamples and routes sensitivity regeneration to the final EC50-aligned OAT script. The release also adds publication-analysis dependencies as an optional installation extra. No neuronal equations, pharmacodynamic parameters, pathology definitions, concentration grids, or manuscript numerical results are changed.
+## v0.9.9: inferential statistics and publication-figure reproducibility
+
+Version 0.9.9 adds the final paired inferential statistical analysis (Friedman tests, Holm-corrected paired Wilcoxon tests, Kendall's W, and matched rank-biserial effect sizes), version-controlled statistical Tables 9-11 and Supplementary Tables S4-S5, and a reproducible generator for professional publication figures. The reproduction entry point now regenerates the statistical outputs and journal-ready vector/PDF plus 800-dpi PNG figures. No neuronal equations, pharmacodynamic parameters, pathology definitions, concentration grids, primary concentration-response data, 4PL fits, or sensitivity data are changed.
 
