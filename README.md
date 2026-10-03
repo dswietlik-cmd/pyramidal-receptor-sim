@@ -204,7 +204,7 @@ The computational framework builds on previous work on NMDA-receptor function, e
 
 ## Citation
 
-A [`CITATION.cff`](CITATION.cff) file is included so GitHub can expose a **Cite this repository** action. The canonical repository is `https://github.com/dswietlik-cmd/pyramidal-receptor-sim`. The manuscript-associated frozen software release is **v1.0.0**. Cite the v1.0.0 release (and its exact repository commit when needed for provenance). The release is intended for long-term archival in Zenodo or another research repository; the archival DOI can be added here and to `CITATION.cff` after it is minted.
+A [`CITATION.cff`](CITATION.cff) file is included so GitHub can expose a **Cite this repository** action. The canonical repository is `https://github.com/dswietlik-cmd/pyramidal-receptor-sim`. The manuscript-associated frozen software release is **v1.0.0**. Cite the v1.0.0 release (and its exact repository commit when needed for provenance). The manuscript-associated frozen release v1.0.0 is permanently archived in Zenodo: https://doi.org/10.5281/zenodo.23120549.
 
 ## License
 
