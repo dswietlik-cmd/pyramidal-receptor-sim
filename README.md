@@ -132,9 +132,28 @@ Table2_state_specific_4PL_fits.csv
 Table3_functional_target_concentrations.csv
 Table4_therapeutic_window_grid.csv
 Table5_best_effect_with_healthy_preservation_ge80.csv
-Figure1_final_study_design.png ... Figure5_healthy_preserving_therapeutic_window.png
+Table9_baseline_inferential_statistics.csv
+Table10_concentration_global_statistics.csv
+Table11_pathology_state_contrast_summary.csv
 TableS3_sensitivity_oat_final_ec50.csv
-FigureS1_sensitivity_oat_final_ec50.png
+TableS4_concentration_vs_zero_wilcoxon.csv
+TableS5_pathology_state_suppression_contrasts.csv
+
+figures_professional/en/
+  Figure1_study_design_professional.{svg,pdf,png}
+  Figure2_perampanel_professional.{svg,pdf,png}
+  Figure3_memantine_professional.{svg,pdf,png}
+  Figure4_diazepam_professional.{svg,pdf,png}
+  Figure5_therapeutic_window_professional.{svg,pdf,png}
+  FigureS1_sensitivity_professional.{svg,pdf,png}
+
+figures_professional/pl/
+  Figure1_study_design_professional.{svg,pdf,png}
+  Figure2_perampanel_professional.{svg,pdf,png}
+  Figure3_memantine_professional.{svg,pdf,png}
+  Figure4_diazepam_professional.{svg,pdf,png}
+  Figure5_therapeutic_window_professional.{svg,pdf,png}
+  FigureS1_sensitivity_professional.{svg,pdf,png}
 ```
 
 These files are reproducibility outputs, not immutable ground truth. Regenerate them after changing equations, parameters, drug mappings, pathology definitions, concentration grids, input statistics, or random-seed handling.
@@ -210,6 +229,24 @@ For full regeneration of the paired concentration-response simulations and final
 
 ```bash
 python scripts/reproduce_paper.py --simulate --sensitivity
+```
+
+The canonical reproduction pipeline regenerates the English journal-ready figures in:
+
+```text
+results/publication_final/figures_professional/en/
+```
+
+The Polish companion figures can be regenerated separately with:
+
+```bash
+python scripts/make_professional_figures_pl.py
+```
+
+and are written to:
+
+```text
+results/publication_final/figures_professional/pl/
 ```
 
 See [`docs/PAPER_WORKFLOW.md`](docs/PAPER_WORKFLOW.md) for the exact paired-seed design,
