@@ -66,7 +66,7 @@ def main() -> None:
 
     print("\nCanonical manuscript outputs: results/publication_final/")
     print("Inferential statistics: Tables 9-11 and Supplementary Tables S4-S5.")
-    print("Professional figures: results/publication_final/figures_professional/")
+    print("Professional figures (English): results/publication_final/figures_professional/en/")
     if not args.simulate:
         print("Input datasets were read from results/reference/.")
     if not args.sensitivity:

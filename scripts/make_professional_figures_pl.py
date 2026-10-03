@@ -19,7 +19,7 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REFERENCE = ROOT / "results" / "reference"
 DEFAULT_PUBLICATION = ROOT / "results" / "publication_final"
-DEFAULT_OUTPUT = DEFAULT_PUBLICATION / "figures_professional"
+DEFAULT_OUTPUT = DEFAULT_PUBLICATION / "figures_professional" / "pl"
 
 DRUGS = ["perampanel", "memantine", "diazepam"]
 STATES = ["healthy", "input_hyperexcitable", "nmda_excitotoxic"]
