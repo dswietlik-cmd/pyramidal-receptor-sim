@@ -135,9 +135,10 @@ def figure1(output_dir: Path, dpi: int, write_tiff: bool) -> None:
         ax.text(xx, y0 + h0 * 0.32, target, ha="center", va="center", fontsize=9)
         if j < 2:
             ax.plot([x0 + (j + 1) * w0 / 3] * 2, [y0 + 0.03, y0 + h0 - 0.03], color="#C7C7C7", lw=0.7)
-    ax.text(0.5, 0.59, "Pharmacodynamic layer: concentration -> effective receptor activity", ha="center", va="bottom", fontsize=8.5)
+    ax.text(0.5, 0.616, "Pharmacodynamic layer", ha="center", va="bottom", fontsize=8.4, fontweight="bold", bbox=dict(facecolor="white", edgecolor="none", alpha=0.96, pad=1.1), zorder=6)
+    ax.text(0.5, 0.584, "concentration → effective receptor activity", ha="center", va="bottom", fontsize=7.9, bbox=dict(facecolor="white", edgecolor="none", alpha=0.96, pad=0.8), zorder=6)
 
-    x1, y1, w1, h1 = 0.16, 0.09, 0.68, 0.17
+    x1, y1, w1, h1 = 0.12, 0.09, 0.76, 0.17
     ax.add_patch(
         FancyBboxPatch(
             (x1, y1),
@@ -149,10 +150,11 @@ def figure1(output_dir: Path, dpi: int, write_tiff: bool) -> None:
             linewidth=0.9,
         )
     )
-    ax.text(0.5, y1 + h1 * 0.68, "Synaptic integration and spike generation", ha="center", va="center", fontweight="bold", fontsize=9.5)
-    ax.text(0.5, y1 + h1 * 0.34, "AMPA PSP + NMDA PSP + GABA-A PSP -> Vm -> firing / ISI / PAN / healthy preservation", ha="center", va="center", fontsize=8)
+    ax.text(0.5, y1 + h1 * 0.70, "Synaptic integration and spike generation", ha="center", va="center", fontweight="bold", fontsize=9.2)
+    ax.text(0.5, y1 + h1 * 0.40, "AMPA PSP + NMDA PSP + GABA-A PSP → Vm", ha="center", va="center", fontsize=7.9)
+    ax.text(0.5, y1 + h1 * 0.20, "→ firing rate / ISI / PAN / preservation of physiological activity", ha="center", va="center", fontsize=7.5)
     for sx in [0.165, 0.5, 0.835]:
-        ax.add_patch(FancyArrowPatch((sx, 0.715), (0.5, 0.565), arrowstyle="-|>", mutation_scale=11, lw=0.85, color="#666666"))
+        ax.add_patch(FancyArrowPatch((sx, 0.715), (0.5, 0.555), arrowstyle="-|>", mutation_scale=11, lw=0.85, color="#666666"))
     ax.add_patch(FancyArrowPatch((0.5, 0.385), (0.5, 0.265), arrowstyle="-|>", mutation_scale=11, lw=0.9, color="#555555"))
     ax.text(0.985, 0.02, "n = 20 paired realizations; seeds 20261200-20261219", ha="right", va="bottom", fontsize=7.5, color="#555555")
     save_figure(fig, output_dir, "Figure1_study_design_professional", dpi, write_tiff)
@@ -215,8 +217,8 @@ def drug_figures(df: pd.DataFrame, fits: pd.DataFrame, output_dir: Path, dpi: in
         clean_axis(axes[1])
         axes[0].text(-0.16, 1.05, "A", transform=axes[0].transAxes, fontweight="bold", fontsize=11)
         axes[1].text(-0.16, 1.05, "B", transform=axes[1].transAxes, fontweight="bold", fontsize=11)
-        axes[0].set_title(f"{LABELS[drug]}: functional response")
-        axes[1].set_title("Suppression and 4PL fit")
+        axes[0].set_title("")
+        axes[1].set_title("")
         axes[0].legend(frameon=False, loc="upper right")
         fig.subplots_adjust(left=0.09, right=0.99, bottom=0.17, top=0.89, wspace=0.31)
         save_figure(fig, output_dir, f"Figure{index}_{drug}_professional", dpi, write_tiff)
@@ -256,7 +258,7 @@ def therapeutic_window_figure(pm: pd.DataFrame, best: pd.DataFrame, output_dir: 
     axes[0].set_ylim(-3, 105)
     axes[0].set_xlabel("Healthy firing preserved (%)")
     axes[0].set_ylabel("Pathological firing suppression (%)")
-    axes[0].set_title("Preservation-suppression trade-off")
+    axes[0].set_title("")
     clean_axis(axes[0])
     axes[0].legend(frameon=False, fontsize=6.6, loc="upper left")
 
@@ -289,7 +291,7 @@ def therapeutic_window_figure(pm: pd.DataFrame, best: pd.DataFrame, output_dir: 
     axes[1].set_xticks(x, [LABELS[d] for d in DRUGS])
     axes[1].set_ylim(-2, 30)
     axes[1].set_ylabel("Effect with >=80% healthy\nfiring preservation (%)")
-    axes[1].set_title("Best effect on tested grids")
+    axes[1].set_title("")
     clean_axis(axes[1])
     axes[1].legend(frameon=False, fontsize=6.5, loc="upper right")
     axes[0].text(-0.16, 1.05, "A", transform=axes[0].transAxes, fontweight="bold", fontsize=11)
