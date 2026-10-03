@@ -1,64 +1,130 @@
 # Manuscript reproduction workflow
 
-This repository separates **fast re-analysis of version-controlled reference data** from
-**full computational regeneration**.
+This repository separates **re-analysis of version-controlled paired reference data** from
+**full computational regeneration**. The canonical manuscript workflow is the paired
+healthy-versus-two-pathology experiment used for the final publication analysis.
 
-## 1. Fast reproducibility check
+## 1. Environment
+
+Use Python 3.10 or newer. From the repository root install the package with the publication
+and development extras:
+
+```bash
+pip install -e ".[publication,dev]"
+```
+
+The `publication` extra installs the additional analysis dependencies used by the manuscript
+workflow (`pandas`, `matplotlib`, and `numba`).
+
+## 2. Fast manuscript re-analysis
 
 From the repository root:
 
 ```bash
-pip install -e ".[dev]"
 python scripts/reproduce_paper.py
 ```
 
-This copies the committed `n=20` replicate dataset into `results/reproduced/`, refits the
-4-parameter logistic curves, repeats the paired-seed bootstrap, and copies the reference
-OAT sensitivity table. It is intended for rapid verification of the manuscript analysis.
+This re-analyzes the committed paired n=20 reference datasets in `results/reference/` and
+regenerates the canonical main-manuscript outputs in `results/publication_final/`:
 
-## 2. Regenerate the n=20 concentration-response simulations
+- baseline-state summary,
+- state-specific 4-parameter logistic fits,
+- paired-seed bootstrap uncertainty,
+- functional target concentrations,
+- healthy-preserving therapeutic-window tables,
+- Figures 1-5,
+- the final Results draft,
+- inferential statistical Tables 9-11 and Supplementary Tables S4-S5,
+- professional publication figures in `results/publication_final/figures_professional/`.
+
+The final analysis uses **500 paired-seed bootstrap resamples** and bootstrap RNG seed
+`20261001`.
+
+## 3. Regenerate the n=20 concentration-response simulations
 
 ```bash
 python scripts/reproduce_paper.py --simulate
 ```
 
-The simulation uses:
+The paired simulation uses:
 
-- 20 independent replicates per concentration,
-- base seed `20261200` (`seed = base + replicate`),
-- rate-preserving jittered input trains,
-- jitter `0.5 ms`,
-- identical input trains across concentrations within a replicate (paired design),
-- the receptor-calibrated CA1-like reference configuration.
+- 20 computational stochastic replicates per state and concentration,
+- seeds `20261200` through `20261219`,
+- a 0.5 ms integration step and 10 s simulation duration,
+- rate-preserving input trains with +/-0.5 ms jitter,
+- identical seed IDs across drug concentrations,
+- healthy state: 1.00x excitatory drive and 1.00x NMDA pathology multiplier,
+- input-driven pathology: 1.65x excitatory drive and 1.00x NMDA pathology multiplier,
+- NMDA-driven pathology: 1.00x excitatory drive and 4.10x NMDA pathology multiplier.
 
-This is substantially slower than re-analysis of committed data.
+The concentration grids are defined in `scripts/compare_two_pathologies_drugs_fast.py`.
+Full regeneration rewrites the paired reference CSV files in `results/reference/` before
+running the final analysis.
 
-## 3. Regenerate sensitivity analysis
+
+## 4. Inferential statistical analysis
+
+The paired computational replicates are analyzed with:
+
+- Friedman repeated-measures rank tests for baseline states and concentration grids,
+- Kendall's W as the Friedman effect-size measure,
+- two-sided paired Wilcoxon signed-rank tests for planned contrasts,
+- Holm correction for family-wise error within the pre-specified comparison families,
+- matched rank-biserial correlation as a paired effect-size measure.
+
+Run directly with:
+
+```bash
+python scripts/run_stat_analysis.py
+```
+
+See `docs/STATISTICAL_ANALYSIS.md` for definitions and interpretation limits. The n=20
+units are computational stochastic replicates, not biological samples.
+
+## 5. Professional publication figures
+
+Run directly with:
+
+```bash
+python scripts/make_professional_figures.py
+```
+
+This generates SVG and PDF vector graphics plus 800-dpi PNG files in
+`results/publication_final/figures_professional/`. Add `--tiff` for large 800-dpi TIFF files.
+The plotted bootstrap intervals are descriptive uncertainty bands for visualization and are
+separate from the inferential tests above.
+
+## 6. Regenerate the final sensitivity analysis
+
+```bash
+python scripts/reproduce_paper.py --sensitivity
+```
+
+For a complete regeneration from the model:
 
 ```bash
 python scripts/reproduce_paper.py --simulate --sensitivity
 ```
 
-One-at-a-time perturbations are evaluated at each drug's fitted functional EC50:
+The final OAT analysis uses the **final healthy-state functional EC50 values read directly
+from `results/publication_final/Table2_state_specific_4PL_fits.csv`**. It evaluates:
 
-- AMPA/EPSP amplitude: ±10%,
-- GABA-A/IPSP magnitude: ±10%,
-- explicit NMDA PSP scale: ±20%,
-- NMDA activation threshold: ±2 mV,
-- spike threshold: ±2 mV.
+- AMPA EPSP amplitude: +/-10%,
+- GABA-A IPSP magnitude: +/-10%,
+- explicit NMDA PSP scale: +/-20%,
+- NMDA activation threshold: +/-2 mV,
+- spike threshold: +/-2 mV.
 
-For every scenario, the drug-treated neuron is compared with a matched drug-free control
-using the same stochastic input seed. If the matched drug-free control is silent, relative
-suppression is undefined and is reported as not estimable rather than imputed.
+For each perturbation, the drug-treated simulation is compared with a matched drug-free
+control using the same stochastic input seed. If the matched control is silent, relative
+suppression is not estimable rather than imputed. The outputs are:
 
-## 4. Bootstrap uncertainty
+- `results/publication_final/TableS3_sensitivity_oat_final_ec50.csv`,
+- `results/publication_final/FigureS1_sensitivity_oat_final_ec50.png`.
 
-`bootstrap_4pl.py` resamples replicate identities with replacement, preserving the paired
-concentration structure within each resampled replicate. The default is 200 bootstrap
-resamples, matching the current manuscript analysis.
+## 7. Interpretation limits
 
-## Interpretation
-
-The reported functional EC50 values are properties of the calibrated computational
-system and stimulation protocol. They are not molecular binding constants, clinical doses,
-or predicted human brain exposures.
+Functional EC50 values are properties of the calibrated drug-receptor-synapse-neuron
+system and simulation protocol. They are not molecular binding constants, clinical doses,
+or predicted human brain exposures. The >=80% healthy-firing criterion is a descriptive
+model threshold, not a clinically validated therapeutic index.
