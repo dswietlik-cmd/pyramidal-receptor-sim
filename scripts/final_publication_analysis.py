@@ -3,7 +3,8 @@
 
 Uses the n=20 paired dataset produced by compare_two_pathologies_drugs_fast.py.
 Outputs state-specific 4PL fits with paired-seed bootstrap, publication tables,
-figures, and a concise Results draft.
+and a concise Results draft. Publication figures are generated separately by
+make_professional_figures.py.
 """
 from __future__ import annotations
 
@@ -14,7 +15,6 @@ from collections import defaultdict
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -170,43 +170,10 @@ def main():
                 best.append(b)
     write_csv(OUT/"Table5_best_effect_with_healthy_preservation_ge80.csv", best)
 
-    # Figure 1: study design schematic
-    fig,ax=plt.subplots(figsize=(10,5.6)); ax.axis('off')
-    boxes=[(0.05,0.68,0.22,0.18,'Healthy\n~11 Hz'),(0.39,0.68,0.22,0.18,'Input-driven pathology\n1.65x excitatory drive\n~24.6 Hz'),(0.73,0.68,0.22,0.18,'NMDA-driven pathology\n4.10x NMDA pathology\n~23.6 Hz')]
-    for x,y,w,h,t in boxes:
-        ax.add_patch(plt.Rectangle((x,y),w,h,fill=False,linewidth=1.6)); ax.text(x+w/2,y+h/2,t,ha='center',va='center',fontsize=11)
-    ax.text(.5,.50,'n=20 paired seeds per state and concentration',ha='center',fontsize=12)
-    drugs='Perampanel -> AMPA\nMemantine -> NMDA\nDiazepam -> GABA-A'
-    ax.add_patch(plt.Rectangle((.33,.20),.34,.20,fill=False,linewidth=1.6)); ax.text(.5,.30,drugs,ha='center',va='center',fontsize=11)
-    for x in (.16,.50,.84): ax.annotate('',xy=(.50,.40),xytext=(x,.68),arrowprops=dict(arrowstyle='->',lw=1.2))
-    ax.text(.5,.06,'Endpoints: firing rate, ISI, receptor PSP components, NMDA gate-open fraction, plasticity state, PAN, healthy preservation',ha='center',fontsize=9,wrap=True)
-    fig.tight_layout(); fig.savefig(OUT/'Figure1_final_study_design.png',dpi=300,bbox_inches='tight'); plt.close(fig)
-
-    # Figures 2-4: per drug firing curves by state
-    for i,drug in enumerate(DRUGS,start=2):
-        fig,ax=plt.subplots(figsize=(7.4,5.2))
-        gd=df[df.drug==drug]
-        for state in STATES:
-            s=gd[gd.state==state].groupby('concentration_nM').firing_hz.agg(['mean','std']).reset_index()
-            ax.errorbar(s.concentration_nM,s['mean'],yerr=s['std'],marker='o',capsize=3,label=LABELS[state])
-        ax.set_xlabel('Concentration (nM)'); ax.set_ylabel('Firing rate (Hz)')
-        ax.set_title(f'{LABELS[drug]}: healthy vs matched pathological states (n=20)')
-        ax.legend(frameon=False); ax.grid(alpha=.2); fig.tight_layout()
-        fig.savefig(OUT/f'Figure{i}_{drug}_healthy_vs_pathology.png',dpi=300,bbox_inches='tight'); plt.close(fig)
-
-    # Figure 5: maximum pathological suppression compatible with >=80% healthy preservation
-    fig,ax=plt.subplots(figsize=(9,5.4))
-    x=np.arange(len(DRUGS)); width=.34
-    for j,path in enumerate(PATHOLOGIES):
-        vals=[]
-        for drug in DRUGS:
-            rows=[r for r in best if r['pathology_state']==path and r['drug']==drug]
-            vals.append(rows[0]['pathological_suppression_fraction']*100 if rows else np.nan)
-        ax.bar(x+(j-.5)*width,vals,width,label=LABELS[path])
-    ax.set_xticks(x, [LABELS[d] for d in DRUGS]); ax.set_ylabel('Max pathological firing suppression (%)\nwhile mean healthy firing >=80% of baseline')
-    ax.set_title('Healthy-preserving therapeutic window on tested concentration grids')
-    ax.legend(frameon=False); ax.grid(axis='y',alpha=.2); fig.tight_layout()
-    fig.savefig(OUT/'Figure5_healthy_preserving_therapeutic_window.png',dpi=300,bbox_inches='tight'); plt.close(fig)
+    # Publication figures are generated separately by scripts/make_professional_figures.py
+    # (English) and scripts/make_professional_figures_pl.py (Polish). Keeping figure
+    # generation out of this analysis script prevents obsolete flat figure files from
+    # being recreated in results/publication_final/.
 
     # Results draft
     bmap={r['state']:r for r in baseline_rows}
