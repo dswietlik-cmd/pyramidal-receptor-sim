@@ -93,7 +93,8 @@ def main() -> None:
     )
     ap.add_argument(
         "--figure",
-        default=str(ROOT / "results/publication_final/FigureS1_sensitivity_oat_final_ec50.png"),
+        default=None,
+        help="Optional path for the legacy diagnostic sensitivity plot. The canonical Supplementary Figure S1 is generated separately by make_professional_figures.py.",
     )
     args = ap.parse_args()
 
@@ -138,42 +139,44 @@ def main() -> None:
         w.writeheader()
         w.writerows(rows)
 
-    df = pd.DataFrame(rows)
-    order = list(SCENARIOS)
-    short = [
-        "Ref", "AMPA\n-10%", "AMPA\n+10%", "GABA\n-10%", "GABA\n+10%",
-        "NMDA scale\n-20%", "NMDA scale\n+20%", "NMDA thr.\n-2 mV", "NMDA thr.\n+2 mV",
-        "Spike thr.\n-2 mV", "Spike thr.\n+2 mV",
-    ]
-    titles = {
-        "perampanel": f"Perampanel ({ec50s['perampanel']:.2f} nM)",
-        "memantine": f"Memantine ({ec50s['memantine']:.2f} nM)",
-        "diazepam": f"Diazepam ({ec50s['diazepam']:.2f} nM)",
-    }
-    fig, axs = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
-    for ax, drug in zip(axs, ("perampanel", "memantine", "diazepam")):
-        g = df[df.drug == drug].set_index("scenario").loc[order]
-        x = np.arange(len(order))
-        y = g["suppression_percent"].to_numpy(float)
-        e = g["suppression_sd_percent"].to_numpy(float)
-        valid = np.isfinite(y)
-        ax.errorbar(x[valid], y[valid], yerr=e[valid], marker="o", linestyle="none", capsize=3)
-        ax.axhline(float(g.loc["baseline", "suppression_percent"]), linewidth=1, linestyle="--")
-        ax.text(1, 5, "NE\n(control silent)", ha="center", va="bottom", fontsize=8)
-        n_thr = int(g.loc["Threshold_+2mV", "n_valid"])
-        ax.text(10, min(98, float(g.loc["Threshold_+2mV", "suppression_percent"])), f"n={n_thr}", ha="center", va="top", fontsize=8)
-        ax.set_ylim(0, 105)
-        ax.set_ylabel("Firing suppression (%)")
-        ax.set_title(titles[drug])
-        ax.grid(axis="y", alpha=0.2)
-    axs[-1].set_xticks(np.arange(len(order)), short)
-    fig.suptitle("One-at-a-time sensitivity analysis at final healthy-state functional EC50 values", fontsize=13)
-    fig.tight_layout(rect=[0, 0, 1, 0.97])
-    fig.savefig(args.figure, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
+    if args.figure:
+        df = pd.DataFrame(rows)
+        order = list(SCENARIOS)
+        short = [
+            "Ref", "AMPA\n-10%", "AMPA\n+10%", "GABA\n-10%", "GABA\n+10%",
+            "NMDA scale\n-20%", "NMDA scale\n+20%", "NMDA thr.\n-2 mV", "NMDA thr.\n+2 mV",
+            "Spike thr.\n-2 mV", "Spike thr.\n+2 mV",
+        ]
+        titles = {
+            "perampanel": f"Perampanel ({ec50s['perampanel']:.2f} nM)",
+            "memantine": f"Memantine ({ec50s['memantine']:.2f} nM)",
+            "diazepam": f"Diazepam ({ec50s['diazepam']:.2f} nM)",
+        }
+        fig, axs = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+        for ax, drug in zip(axs, ("perampanel", "memantine", "diazepam")):
+            g = df[df.drug == drug].set_index("scenario").loc[order]
+            x = np.arange(len(order))
+            y = g["suppression_percent"].to_numpy(float)
+            e = g["suppression_sd_percent"].to_numpy(float)
+            valid = np.isfinite(y)
+            ax.errorbar(x[valid], y[valid], yerr=e[valid], marker="o", linestyle="none", capsize=3)
+            ax.axhline(float(g.loc["baseline", "suppression_percent"]), linewidth=1, linestyle="--")
+            ax.text(1, 5, "NE\n(control silent)", ha="center", va="bottom", fontsize=8)
+            n_thr = int(g.loc["Threshold_+2mV", "n_valid"])
+            ax.text(10, min(98, float(g.loc["Threshold_+2mV", "suppression_percent"])), f"n={n_thr}", ha="center", va="top", fontsize=8)
+            ax.set_ylim(0, 105)
+            ax.set_ylabel("Firing suppression (%)")
+            ax.set_title(titles[drug])
+            ax.grid(axis="y", alpha=0.2)
+        axs[-1].set_xticks(np.arange(len(order)), short)
+        fig.suptitle("One-at-a-time sensitivity analysis at final healthy-state functional EC50 values", fontsize=13)
+        fig.tight_layout(rect=[0, 0, 1, 0.97])
+        fig.savefig(args.figure, dpi=300, bbox_inches="tight")
+        plt.close(fig)
+    
     print(f"wrote {out}")
-    print(f"wrote {args.figure}")
+    if args.figure:
+        print(f"wrote {args.figure}")
 
 
 if __name__ == "__main__":

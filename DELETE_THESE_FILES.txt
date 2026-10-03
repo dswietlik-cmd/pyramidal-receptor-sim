@@ -1,0 +1,12 @@
+Delete these obsolete root-level files if they are still present in the GitHub repository before tagging v1.0.0:
+
+reproduce_paper.py
+UPLOAD_INSTRUCTIONS.txt
+FigureS1_sensitivity_oat_final_ec50.png
+
+Do NOT delete:
+- scripts/reproduce_paper.py
+- scripts/run_sensitivity_oat_final_fast.py
+- results/publication_final/TableS3_sensitivity_oat_final_ec50.csv
+- results/publication_final/figures_professional/en/
+- results/publication_final/figures_professional/pl/

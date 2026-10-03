@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyramidal-receptor-sim"
-version = "0.9.9"
+version = "1.0.0"
 description = "CA1-like pyramidal neuron model for in silico NMDA, AMPA and GABA-A receptor pharmacodynamics"
 readme = "README.md"
 requires-python = ">=3.10"

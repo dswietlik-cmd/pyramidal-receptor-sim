@@ -8,4 +8,4 @@ When reporting results from a v0.9.x checkout, record the exact Git commit hash 
 
 ## v1.0.0 — manuscript-associated frozen release
 
-Version 1.0.0 will be created only after the model, simulation protocol, concentration grids, statistical analysis, figures, and manuscript Results are frozen. That release will be archived in Zenodo (or another long-term repository) and assigned a DOI for citation in the manuscript.
+Version 1.0.0 is the manuscript-associated frozen release. It freezes the model, simulation protocol, concentration grids, statistical analysis, publication figures, and manuscript Results used for the associated paper. The release is intended for archival in Zenodo (or another long-term repository), with the resulting DOI cited in the manuscript.

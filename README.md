@@ -204,7 +204,7 @@ The computational framework builds on previous work on NMDA-receptor function, e
 
 ## Citation
 
-A [`CITATION.cff`](CITATION.cff) file is included so GitHub can expose a **Cite this repository** action. The canonical repository is `https://github.com/dswietlik-cmd/pyramidal-receptor-sim`. For the pre-publication phase, cite the repository commit or the relevant v0.9.x tag when needed. The final manuscript-associated **v1.0.0** release will be archived with Zenodo (or another long-term repository), and its DOI will then be added here and to `CITATION.cff`.
+A [`CITATION.cff`](CITATION.cff) file is included so GitHub can expose a **Cite this repository** action. The canonical repository is `https://github.com/dswietlik-cmd/pyramidal-receptor-sim`. The manuscript-associated frozen software release is **v1.0.0**. Cite the v1.0.0 release (and its exact repository commit when needed for provenance). The release is intended for long-term archival in Zenodo or another research repository; the archival DOI can be added here and to `CITATION.cff` after it is minted.
 
 ## License
 
@@ -214,11 +214,11 @@ You may use, modify, and redistribute the software under those terms. Redistribu
 
 ## Development status
 
-Current development release: **v0.9.9**. This is a pre-publication research version. The model, analysis workflow, parameterization, and reference results may still change before the manuscript-associated **v1.0.0** release.
+Current manuscript-associated frozen release: **v1.0.0**. This release freezes the model configuration, simulation protocol, concentration grids, statistical analysis, publication tables, and manuscript figure-generation workflow used for the associated manuscript.
 
 ## Manuscript reproduction pipeline
 
-A single entry point is provided for the final pre-publication paired analysis:
+A single entry point is provided for the frozen manuscript-associated paired analysis:
 
 ```bash
 pip install -e ".[publication]"
@@ -281,6 +281,10 @@ Version 0.9.7 adds the sensitivity analysis recalculated at the final healthy-st
 ## v0.9.8: Reproducibility and manuscript-pipeline consistency
 
 Version 0.9.8 aligns package metadata and documentation with the final pre-publication workflow. The single reproduction entry point now runs the final paired healthy/input-driven/NMDA-driven publication analysis with 500 paired-seed bootstrap resamples and routes sensitivity regeneration to the final EC50-aligned OAT script. The release also adds publication-analysis dependencies as an optional installation extra. No neuronal equations, pharmacodynamic parameters, pathology definitions, concentration grids, or manuscript numerical results are changed.
+## v1.0.0: manuscript-associated frozen release
+
+Version 1.0.0 freezes the manuscript-associated computational workflow after final alignment of inferential statistics, Supplementary Tables S4-S5, language-specific publication figures, sensitivity-analysis paths, and reproducibility documentation. The release retains the same neuronal equations, pharmacodynamic parameters, pathology definitions, concentration grids, paired random seeds, primary concentration-response data, state-specific 4PL results, and final OAT sensitivity data used in the finalized v0.9.9 manuscript analysis.
+
 ## v0.9.9: inferential statistics and publication-figure reproducibility
 
 Version 0.9.9 adds the final paired inferential statistical analysis (Friedman tests, Holm-corrected paired Wilcoxon tests, Kendall's W, and matched rank-biserial effect sizes), version-controlled statistical Tables 9-11 and Supplementary Tables S4-S5, and a reproducible generator for professional publication figures. The reproduction entry point now regenerates the statistical outputs and journal-ready vector/PDF plus 800-dpi PNG figures. No neuronal equations, pharmacodynamic parameters, pathology definitions, concentration grids, primary concentration-response data, 4PL fits, or sensitivity data are changed.

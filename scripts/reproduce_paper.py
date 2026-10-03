@@ -48,7 +48,7 @@ def main() -> None:
         run("scripts/compare_two_pathologies_drugs_fast.py")
 
     # Canonical main analysis: state-specific 4PL fits, 500 paired-seed bootstrap
-    # resamples, healthy-preserving window, Tables 1-5 and legacy Figures 1-5.
+    # resamples, healthy-preserving window, and Tables 1-5.
     run("scripts/final_publication_analysis.py")
 
     # Inferential analysis of the paired computational replicates.
